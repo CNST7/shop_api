@@ -1,0 +1,8 @@
+# development tools
+black==23.1.0
+mypy==1.0.0
+
+# testing tools
+pytest==7.2.1
+pytest-django==4.5.2
+pytest-asyncio==0.20.3
