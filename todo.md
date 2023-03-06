@@ -1,0 +1,100 @@
+# TODO:
+ - ## CODE:
+    - read more about mixins, make/use them
+    - permissions 
+        - permissions for generic endpoints
+    - add logging
+    - save cart due date on db
+    - authorization & authentication
+        - maybe: https://github.com/James1345/django-rest-knox
+    - django admin panel
+    - [x] refactor item endpoint
+    - [x] add doc strings
+    - [x] remove unused errors
+        - [x] handle domain errors
+    - [x] wrapper for errors
+    - middleware
+        - middleware for errors (?)
+            - use class-based middleware
+        - [x] middleware for cart_id cookie
+            - [x] make async version
+            - [x] test async middleware 
+            - move db request from MW to endpoint
+                - problems found while doing that, request does not consist updated cart after endpoint logic is done -> changes reverted
+    - [x] use generics for CRUD - https://ray.hashnode.dev/developing-rest-api-using-django-rest-framework-drf
+        - [x] read more about ViewSets - how to use them
+    - [x] read more about MyPy
+    - [x] extract domain logic outside the project
+        - [x] write unittests in pytest
+        - unit of work
+            - create context manager to save model in db
+ - ## PROJECT-RELATED STUFF (devops)
+    - test `flake8`
+    - create celery beats background task to remove outdated carts from system
+    - move out of api's dockerfile `collectstatic`, `makemigrations` and `migrate` commands to the script (or do it manually after deploy - not recommended)
+    - CI/CD pipelines
+        - jenkins | github actions & dockerhub | gitlab CI/CD
+        - pre commit hooks:
+            - auto run code formatter (black)
+            - auto run static code analizis tools (mypy)
+            - auto run isort
+            - auto run tests (pytest)
+    - non-root user in containers
+    - use `grafana` and `prometheus` - for logs
+    - create dev/test/prod environments
+        - docker env? -> read more about it! 
+        - settings.py per environment - read more
+    - [x] env file for host, debug, secret, db (django.env)
+    - [x] add pythonpath to project
+    - [x] MyPy
+        - [x] MyPy configuration file
+            - [x] <s> mypy configuration file in django project </s>
+            - [x] <s> mypy configuration file in domain module </s>
+            - [x] ultimate ONE FOR ALL mypy configuration file
+    - [x] optimize dockerfile for faster building
+
+
+ - ## TESTS
+    - remove global variables in tests => make them local
+    - write more tests
+    - [x] `/item` endpoint actually requires all fields, fix it ASAP!
+    - [x] add configuration file for pytest django
+        - [x] remove settings setup from tests
+    - integration tests:
+        - [x] check how endpoint behaves when cookie is being sent
+        - [x] send all fields
+        - [x] test async task
+            - [x] use global variable instead of decorator (integration tests improvement)
+        - [x] cart.id from client has a value that is incorrect
+        - [x] cart.id from client is no longer existing in system db
+    - [x] change tests organization to mimic actual project structure
+
+ - ## OTHERS
+    - debugging inside docker
+        - turn on console in docker TTY
+        - [x] debugging through vs code (docker-compose.debug.yml)
+    - [x] rename src to shop_app
+        - rename mycart
+        - rename cartAPI
+    - [x] `/item` actually allows user to create new item if it wasn't existing before
+    - [x] use domain logic
+    - [x] use serializer for input validation
+    - [x] make 1 requirements file, or eventually add requirements-dev.txt
+    - [x] use cellery and rabbit/redis to gather events, process events later (updates on db)
+    - [x] fix dockerfile on simplified branch
+        - [x] move changes from simplified branch to main
+    - [x] modify error wrappers to handle only domain errors
+    - [x] modify domain logic, remove cartID from Item
+    - [x] UPDATE DOMAIN LOGIC, cart id is str!
+        - [x] *cart id must be uuid4!*
+
+    - [x] write integration tests checking status code of an endpoint
+    - [x] get rid of endpoints created for crud
+    - [x] write test - 0 or less than 0 item value should not be possible
+    - [x] simplify requirements files (do not use pip freeze for them)
+
+- ## DDD
+    - CQRS commands
+    - repositories
+    - services
+    - events

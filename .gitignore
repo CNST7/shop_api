@@ -1,0 +1,18 @@
+# virtual environments
+venv
+
+# python cache
+__pycache__
+
+# python modules' cache
+.mypy_cache
+.pytest_cache
+
+#IDE configuration
+.vscode
+
+# static and media files (in future)
+staticfiles
+
+# local database
+db.sqlite3

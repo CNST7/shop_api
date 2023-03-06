@@ -1,0 +1,16 @@
+# virtual environments
+venv
+shopVenv
+
+# python cache
+__pycache__
+
+# python modules' cache
+.mypy_cache
+.pytest_cache
+
+#IDE configuration
+.vscode
+
+# test settings
+settings_test.py

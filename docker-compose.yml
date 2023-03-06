@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  shop_api:
+    build:
+      context: ./shop_app/
+    env_file:
+      - env/db.env
+      - env/django.env
+      - env/celery.env
+    volumes:
+      - ./shop_app:/shop_app
+      - static_volume:/shop_app/mycart/staticfiles
+    networks:
+      - shop_api_newtork
+    depends_on:
+      - shop_db
+    restart: unless-stopped
+
+  celery:
+    build:
+      context: ./shop_app
+    env_file:
+      - env/db.env
+      - env/django.env
+      - env/celery.env
+    command: python -m celery -A mycart worker
+    volumes:
+      - ./shop_app:/shop_app
+      - static_volume:/shop_app/mycart/staticfiles
+    networks:
+      - shop_api_newtork
+    depends_on:
+      - shop_db
+      - redis
+      - shop_api
+    restart: unless-stopped
+
+  shop_db:
+    image: postgres:15.1
+    volumes:
+      - shop_db_volume:/var/lib/postgresql/data
+
+    env_file:
+      - env/db.env
+    networks:
+      - shop_api_newtork
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - shop_api
+    volumes:
+      - static_volume:/shop_app/mycart/staticfiles
+    networks:
+      - shop_api_newtork
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.0-bullseye
+    volumes:
+      - redis_value:/data
+    networks:
+      - shop_api_newtork
+    restart: unless-stopped
+
+volumes:
+  static_volume:
+  shop_db_volume:
+  redis_value:
+
+
+networks:
+  shop_api_newtork:
+    driver: bridge
