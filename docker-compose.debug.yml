@@ -8,7 +8,7 @@ services:
       [
         "sh",
         "-c",
-        "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000"
+        "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --settings=mycart.settings_test"
       ]
     env_file:
       - env/db.env
@@ -22,8 +22,6 @@ services:
       - 8000:8000
     networks:
       - shop_api_newtork
-    depends_on:
-      - shop_db
     restart: unless-stopped
 
   celery:
@@ -40,20 +38,8 @@ services:
     networks:
       - shop_api_newtork
     depends_on:
-      - shop_db
       - redis
       - shop_api
-    restart: unless-stopped
-
-  shop_db:
-    image: postgres:15.1
-    volumes:
-      - shop_db_volume:/var/lib/postgresql/data
-
-    env_file:
-      - env/db.env
-    networks:
-      - shop_api_newtork
     restart: unless-stopped
 
   redis:

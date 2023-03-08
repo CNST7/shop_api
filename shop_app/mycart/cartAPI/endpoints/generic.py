@@ -1,6 +1,6 @@
 from cartAPI.models import Cart, Item
 from cartAPI.serializers.cart import CartSerializer
-from cartAPI.serializers.item import ItemAllFieldSerializer
+from cartAPI.serializers.item import ItemAllFieldsSerializer
 from rest_framework import viewsets
 
 
@@ -11,4 +11,4 @@ class CartViewSet(viewsets.ModelViewSet):
 
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.select_related("cart").all()
-    serializer_class = ItemAllFieldSerializer
+    serializer_class = ItemAllFieldsSerializer

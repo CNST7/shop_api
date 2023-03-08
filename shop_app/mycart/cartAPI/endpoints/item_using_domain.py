@@ -6,7 +6,7 @@ from ..serializers.item import ItemSerializer
 from ..errors.errorHandlingMethodWrapper import HandleErrors
 from ..tasks import persist_cart
 from ..DTOs.cart import CartDTO
-from shop_app.shop_domain.models.item import Item as DomainItem
+from shop_app.shop_domain import models as domain
 
 
 class ItemEndpoint(APIView):
@@ -16,14 +16,14 @@ class ItemEndpoint(APIView):
         item_serializer = ItemSerializer(data=request.data)
         item_serializer.is_valid(raise_exception=True)
 
-        cart = request.cart.to_domain()
+        cart: domain.Cart = request.cart.to_domain()
 
         item = cart.find_item(request.data.get("external_id"))
         if item:
             item.name = request.data.get("name", item.name)
             item.value = request.data.get("value", item.value)
         else:
-            item = DomainItem(**request.data)
+            item = domain.Item(**request.data)
             cart.add_item(item)
 
         persist_cart.delay(cart_dto=CartDTO.from_domain(cart).as_dict())
